@@ -1,12 +1,15 @@
-# blockchain-developer-bootcamp-final-project
+# Basic Sample Hardhat Project
 
-## project idea
+This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
 
-Trade NFTs that prove ownership of shares/stocks.
+Try running some of the following tasks:
 
-## example workflow
-
-1. user mints a token for their share
-2. the token is a proof that the user owns the share (possibly by using a digital identity)
-3. user sells token to another user
-4. transaction serves as cryptographic proof that ownership has been transferred
+```shell
+npx hardhat accounts
+npx hardhat compile
+npx hardhat clean
+npx hardhat test
+npx hardhat node
+node scripts/sample-script.js
+npx hardhat help
+```

@@ -2,20 +2,32 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
 import { ethers } from 'ethers'
 import Greeter from './artifacts/contracts/Greeter.sol/Greeter.json'
-import Token from './artifacts/contracts/NDToken.sol/NDToken.json'
+import Token from './artifacts/contracts/ERC20Token.sol/ERC20Token.json'
+import TokenFactory from './artifacts/contracts/ERC20TokenFactory.sol/ERC20TokenFactory.json'
 
-const greeterAddress = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"
-const tokenAddress = "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
+const greeterAddress = "0xc6e7DF5E7b4f2A278906862b61205850344D4e7d"
+const tokenAddress = "0x59b670e9fA9D0A427751Af201D676719a970857b"
+const tokenFactoryAddress = "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1"
 
 function App() {
+  // Greeting
   const [greeting, setGreetingValue] = useState()
+
+  // ERC20
   const [userAccount, setUserAccount] = useState()
   const [amount, setAmount] = useState()
+
+  // ERC20Factory
+  const [name, setName] = useState()
+  const [symbol, setSymbol] = useState()
+  const [decimals, setDecimals] = useState()
+  const [initalSupply, setInitialSupply] = useState()
 
   async function requestAccount() {
     await window.ethereum.request({ method: 'eth_requestAccounts' });
   }
 
+  // Greeting
   async function fetchGreeting() {
     if (typeof window.ethereum !== 'undefined') {
       const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -28,16 +40,6 @@ function App() {
         console.log("Error: ", err)
       }
     }    
-  }
-
-  async function getBalance() {
-    if (typeof window.ethereum !== 'undefined') {
-      const [account] = await window.ethereum.request({ method: 'eth_requestAccounts' })
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const contract = new ethers.Contract(tokenAddress, Token.abi, provider)
-      const balance = await contract.balanceOf(account);
-      console.log("Balance: ", balance.toString());
-    }
   }
 
   async function setGreeting() {
@@ -54,15 +56,40 @@ function App() {
     }
   }
 
+  // ERC20Token
+  async function getBalance() {
+    if (typeof window.ethereum !== 'undefined') {
+      const [account] = await window.ethereum.request({ method: 'eth_requestAccounts' })
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const contract = new ethers.Contract(tokenAddress, Token.abi, provider)
+      const balance = await contract.balanceOf(account);
+      console.log("Balance: ", balance.toString());
+    }
+  }
+
+
   async function sendCoins() {
     if (typeof window.ethereum !== 'undefined') {
       await requestAccount()
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(tokenAddress, Token.abi, signer);
-      const transation = await contract.transfer(userAccount, amount);
-      await transation.wait();
+      const transaction = await contract.transfer(userAccount, amount);
+      await transaction.wait();
       console.log(`${amount} Coins successfully sent to ${userAccount}`);
+    }
+  }
+
+  //ERC20TokenFactory
+  async function createToken() {
+    if (typeof window.ethereum !== 'undefined') {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner()
+      const contract = new ethers.Contract(tokenFactoryAddress, TokenFactory.abi, signer)
+      await contract.deployNewERC20Token(name, symbol, decimals, initalSupply);
+      contract.on("ERC20TokenCreated", (tokenAddress) => {
+        console.log("Token Address: ", tokenAddress)
+      })
     }
   }
 
@@ -76,8 +103,15 @@ function App() {
         <br />
         <button onClick={getBalance}>Get Balance</button>
         <button onClick={sendCoins}>Send Coins</button>
-        <input onChange={e => setUserAccount(e.target.value)} placeholder="Account ID" />
-        <input onChange={e => setAmount(e.target.value)} placeholder="Amount" />
+        <input onChange={x => setUserAccount(x.target.value)} placeholder="Account ID" />
+        <input onChange={x => setAmount(x.target.value)} placeholder="Amount" />
+
+        <br />
+        <button onClick={createToken}>Create Token</button>
+        <input onChange={x => setName(x.target.value)} placeholder="Name" />
+        <input onChange={x => setSymbol(x.target.value)} placeholder="Symbol" />
+        <input onChange={x => setDecimals(x.target.value)} placeholder="Decimals" />
+        <input onChange={x => setInitialSupply(x.target.value)} placeholder="Initial Supply" />
       </header>
     </div>
   );

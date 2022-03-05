@@ -4,8 +4,8 @@ import { ethers } from 'ethers'
 import Token from './artifacts/contracts/ERC20Token.sol/ERC20Token.json'
 import TokenFactory from './artifacts/contracts/ERC20TokenFactory.sol/ERC20TokenFactory.json'
 
-const tokenAddress = "0x59b670e9fA9D0A427751Af201D676719a970857b"
-const tokenFactoryAddress = "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1"
+const tokenAddress = "0x9E545E3C0baAB3E08CdfD552C960A1050f373042"
+const tokenFactoryAddress = "0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9"
 
 function App() {
   // ERC20

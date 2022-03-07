@@ -2,10 +2,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
 import { ethers } from 'ethers'
 import Token from './artifacts/contracts/ERC20Token.sol/ERC20Token.json'
-import TokenFactory from './artifacts/contracts/ERC20TokenFactory.sol/ERC20TokenFactory.json'
+import TokenRegister from './artifacts/contracts/ERC20TokenRegister.sol/ERC20TokenRegister.json'
 
-const tokenAddress = "0x9E545E3C0baAB3E08CdfD552C960A1050f373042"
-const tokenFactoryAddress = "0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9"
+const tokenAddress = "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
+const tokenListAddress = "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1"
 
 function App() {
   // ERC20
@@ -51,9 +51,14 @@ function App() {
     if (typeof window.ethereum !== 'undefined') {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner()
-      const contract = new ethers.Contract(tokenFactoryAddress, TokenFactory.abi, signer)
-      await contract.deployNewERC20Token(name, symbol, decimals, initalSupply);
-      contract.on("ERC20TokenCreated", (tokenAddress) => {
+      const tokenListContract = new ethers.Contract(tokenListAddress, TokenRegister.abi, signer)
+      await tokenListContract.registerNewERC20Token(name, symbol, decimals, initalSupply);
+      tokenListContract.on("ERC20TokenRegistered", (name, symbol, decimals, initialSupply, tokenAddress) => {
+        console.log("Token details:")
+        console.log("Name: ", name)
+        console.log("Symbol: ", symbol)
+        console.log("Decimals: ", decimals)
+        console.log("Initial Supply: ", initialSupply)
         console.log("Token Address: ", tokenAddress)
       })
     }

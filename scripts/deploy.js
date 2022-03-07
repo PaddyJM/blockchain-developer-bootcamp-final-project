@@ -11,14 +11,14 @@ async function main() {
   const Token = await hre.ethers.getContractFactory("ERC20Token");
   const token = await Token.deploy("Test Token", "TT", 0, 1000000, deployer.address);
 
-  const TokenFactory = await hre.ethers.getContractFactory("ERC20TokenFactory");
-  const tokenFactory = await TokenFactory.deploy();
+  const TokenRegister = await hre.ethers.getContractFactory("ERC20TokenRegister");
+  const tokenRegister = await TokenRegister.deploy();
 
   await token.deployed();
-  await tokenFactory.deployed();
+  await tokenRegister.deployed();
 
   console.log("Token deployed to:", token.address);
-  console.log("Token Factory deployed to:", tokenFactory.address);
+  console.log("Token List deployed to:", tokenRegister.address);
 }
 
 main()

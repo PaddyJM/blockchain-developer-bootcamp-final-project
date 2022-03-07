@@ -5,7 +5,7 @@ import Token from './artifacts/contracts/ERC20Token.sol/ERC20Token.json'
 import TokenRegister from './artifacts/contracts/ERC20TokenRegister.sol/ERC20TokenRegister.json'
 
 const tokenAddress = "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
-const tokenRegisterAddress = "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1"
+const tokenRegisterAddress = "0x4A679253410272dd5232B3Ff7cF5dbB88f295319"
 
 function App() {
   // ERC20
@@ -64,6 +64,16 @@ function App() {
     }
   }
 
+    //ERC20TokenFactory
+    async function getTokenRegister() {
+      if (typeof window.ethereum !== 'undefined') {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner()
+        const tokenRegisterContract = new ethers.Contract(tokenRegisterAddress, TokenRegister.abi, signer)
+        console.log(await tokenRegisterContract.getTokenRegister());
+      }
+    }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -78,6 +88,9 @@ function App() {
         <input onChange={x => setSymbol(x.target.value)} placeholder="Symbol" />
         <input onChange={x => setDecimals(x.target.value)} placeholder="Decimals" />
         <input onChange={x => setInitialSupply(x.target.value)} placeholder="Initial Supply" />
+
+        <br />
+        <button onClick={getTokenRegister}>Get Token Register</button>
       </header>
     </div>
   );

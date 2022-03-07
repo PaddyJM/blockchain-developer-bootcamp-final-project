@@ -40,4 +40,8 @@ contract ERC20TokenRegister {
 
         return address(t);
     }
+
+    function getTokenRegister() public view returns (TokenDetails[] memory) {
+        return tokenRegister;
+    }
 }

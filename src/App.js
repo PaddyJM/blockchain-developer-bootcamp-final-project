@@ -5,7 +5,7 @@ import Token from './artifacts/contracts/ERC20Token.sol/ERC20Token.json'
 import TokenRegister from './artifacts/contracts/ERC20TokenRegister.sol/ERC20TokenRegister.json'
 
 const tokenAddress = "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
-const tokenListAddress = "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1"
+const tokenRegisterAddress = "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1"
 
 function App() {
   // ERC20
@@ -47,13 +47,13 @@ function App() {
   }
 
   //ERC20TokenFactory
-  async function createToken() {
+  async function registerToken() {
     if (typeof window.ethereum !== 'undefined') {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner()
-      const tokenListContract = new ethers.Contract(tokenListAddress, TokenRegister.abi, signer)
-      await tokenListContract.registerNewERC20Token(name, symbol, decimals, initalSupply);
-      tokenListContract.on("ERC20TokenRegistered", (name, symbol, decimals, initialSupply, tokenAddress) => {
+      const tokenRegisterContract = new ethers.Contract(tokenRegisterAddress, TokenRegister.abi, signer)
+      await tokenRegisterContract.registerNewERC20Token(name, symbol, decimals, initalSupply);
+      tokenRegisterContract.on("ERC20TokenRegistered", (name, symbol, decimals, initialSupply, tokenAddress) => {
         console.log("Token details:")
         console.log("Name: ", name)
         console.log("Symbol: ", symbol)
@@ -73,7 +73,7 @@ function App() {
         <input onChange={x => setAmount(x.target.value)} placeholder="Amount" />
 
         <br />
-        <button onClick={createToken}>Create Token</button>
+        <button onClick={registerToken}>Create Token</button>
         <input onChange={x => setName(x.target.value)} placeholder="Name" />
         <input onChange={x => setSymbol(x.target.value)} placeholder="Symbol" />
         <input onChange={x => setDecimals(x.target.value)} placeholder="Decimals" />

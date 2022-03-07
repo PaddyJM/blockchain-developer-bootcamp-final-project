@@ -12,7 +12,7 @@ contract ERC20TokenRegister {
         address tokenAddress;
     }
 
-    TokenDetails[] tokenList;
+    TokenDetails[] public tokenRegister;
 
     event ERC20TokenRegistered( string name,
         string symbol,
@@ -34,7 +34,7 @@ contract ERC20TokenRegister {
             msg.sender
         );
 
-        tokenList.push(TokenDetails(name, symbol, decimals, initialSupply, address(t)));
+        tokenRegister.push(TokenDetails(name, symbol, decimals, initialSupply, address(t)));
 
         emit ERC20TokenRegistered(name, symbol, decimals, initialSupply, address(t));
 

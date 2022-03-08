@@ -83,7 +83,7 @@ function App() {
         <input onChange={x => setAmount(x.target.value)} placeholder="Amount" />
 
         <br />
-        <button onClick={registerToken}>Create Token</button>
+        <button onClick={registerToken}>Register Token</button>
         <input onChange={x => setName(x.target.value)} placeholder="Name" />
         <input onChange={x => setSymbol(x.target.value)} placeholder="Symbol" />
         <input onChange={x => setDecimals(x.target.value)} placeholder="Decimals" />
